@@ -3,7 +3,7 @@
 http://jboss.org/schema/weld/beans http://jboss.org/schema/weld/beans_1_1.xsd">
 
   <alternatives>
-    <class>se.hulot.jbpm6jboss7example.util.RewardsUserGroupCallback</class>
+    <class>se.hulot.jbpm6jboss7example.util.ExampleUserGroupCallback</class>
   </alternatives>
 
   <interceptors>

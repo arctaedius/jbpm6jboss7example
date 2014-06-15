@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 
 import org.kie.api.runtime.KieSession;
@@ -16,15 +16,16 @@ import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.api.task.TaskService;
 import org.kie.api.task.model.Status;
+import org.kie.api.task.model.Task;
 import org.kie.api.task.model.TaskSummary;
-import org.kie.internal.runtime.manager.cdi.qualifier.Singleton;
 import org.kie.internal.runtime.manager.context.EmptyContext;
+import org.kie.internal.task.api.InternalTaskService;
 
-@LocalBean
-@Stateless
+@Singleton
+@Startup
 public class JbpmService {
     @Inject
-    @Singleton
+    @org.kie.internal.runtime.manager.cdi.qualifier.Singleton
     private RuntimeManager singletonManager;
 
     private Logger log = Logger.getLogger(this.getClass().getName());
@@ -34,6 +35,7 @@ public class JbpmService {
         // use toString to make sure CDI initializes the bean
         // this makes sure that RuntimeManager is started asap,
         // otherwise after server restart complete task won't move process forward 
+    	log.info("Running PostConstruct");
         singletonManager.toString();
     }
 
@@ -81,6 +83,13 @@ public class JbpmService {
     	taskService.complete(taskId, userId, parameters);            
     	Status statusAfter = taskService.getTaskById(taskId).getTaskData().getStatus();
     	log.info("completeTask: Changed status for task " + taskId + " from " + statusBefore + " to " + statusAfter);
+    	long processId = taskService.getTaskById(taskId).getTaskData().getProcessInstanceId();
+    	InternalTaskService its = (InternalTaskService)taskService;
+    	List<Long> tasks = its.getTasksByProcessInstanceId(processId);
+    	for(Long tid : tasks) {
+    		Task t = taskService.getTaskById(tid);
+    		log.info(t.getTaskData().toString());
+    	}
     }
     private TaskService getTaskService() {
         RuntimeEngine runtime = getRuntimeManager().getRuntimeEngine(EmptyContext.get());

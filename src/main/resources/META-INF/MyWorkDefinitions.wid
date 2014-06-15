@@ -4,6 +4,7 @@ import org.drools.core.process.core.datatype.impl.type.StringDataType;
   [
     "name" : "Notification",
     "parameters" : [
+    "messageId" : new StringDataType()
     ],
     "displayName" : "Notification",
   ]

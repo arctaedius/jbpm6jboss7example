@@ -1,19 +1,3 @@
-/**
- * Copyright 2014 JBoss Inc
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package se.hulot.jbpm6jboss7example.util;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -35,7 +19,7 @@ import org.kie.internal.runtime.manager.cdi.qualifier.Singleton;
 
 
 @ApplicationScoped
-public class RewardsApplicationScopedProducer {
+public class ExampleApplicationScopedProducer {
 
     @Inject
     private InjectableRegisterableItemsFactory factory;
@@ -43,14 +27,14 @@ public class RewardsApplicationScopedProducer {
     @Inject
     private UserGroupCallback usergroupCallback;
 
-    @PersistenceUnit(unitName = "se.hulot.jbpm6jboss7example")
+    @PersistenceUnit(unitName = "se.hulot.jbpm6jboss7example.jbpm")
     private EntityManagerFactory emf;
 
     @Produces
     public EntityManagerFactory produceEntityManagerFactory() {
         if (this.emf == null) {
             this.emf = Persistence
-                    .createEntityManagerFactory("se.hulot.jbpm6jboss7example");
+                    .createEntityManagerFactory("se.hulot.jbpm6jboss7example.jbpm");
         }
         return this.emf;
     }
