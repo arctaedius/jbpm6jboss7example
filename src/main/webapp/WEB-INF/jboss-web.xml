@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>jbpm6jboss7example</context-root>
+</jboss-web>
